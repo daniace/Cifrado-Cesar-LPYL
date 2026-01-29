@@ -25,6 +25,8 @@ class StoreMensajeRequest extends FormRequest
             'asunto' => 'required|string|max:255',
             'contenido' => 'required|string',
             'desplazamiento' => 'required|integer',
+            'excepciones_asunto' => 'nullable|array',
+            'excepciones_contenido' => 'nullable|array',
             'id_emisor' => 'required|exists:usuarios,id',
             'id_receptor' => 'required|exists:usuarios,id',
             'leido' => 'required|boolean',

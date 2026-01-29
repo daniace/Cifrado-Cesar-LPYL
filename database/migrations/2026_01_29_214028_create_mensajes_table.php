@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('asunto');
             $table->text('contenido');
             $table->integer('desplazamiento');
+            $table->json('excepciones_asunto')->nullable();
+            $table->json('excepciones_contenido')->nullable();
             $table->foreignId('id_emisor')->constrained('usuarios');
             $table->foreignId('id_receptor')->constrained('usuarios');
             $table->boolean('leido')->default(false);

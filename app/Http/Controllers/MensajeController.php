@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMensajeRequest;
 use App\Http\Requests\UpdateMensajeRequest;
 use App\Models\Mensaje;
+use App\Models\User;
+use Inertia\Inertia;
 
 class MensajeController extends Controller
 {
@@ -13,7 +15,10 @@ class MensajeController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('mensajes/index', [
+            'mensajes' => Mensaje::all(),
+            'remitente' => User::where('id', '=', auth()->user()->id)->get(),
+        ]);
     }
 
     /**

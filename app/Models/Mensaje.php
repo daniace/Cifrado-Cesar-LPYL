@@ -14,6 +14,8 @@ class Mensaje extends Model
         'asunto',
         'contenido',
         'desplazamiento',
+        'excepciones_asunto',
+        'excepciones_contenido',
         'id_emisor',
         'id_receptor',
         'leido',
@@ -23,6 +25,8 @@ class Mensaje extends Model
 
     protected $casts = [
         'leido' => 'boolean',
+        'excepciones_asunto' => 'array',
+        'excepciones_contenido' => 'array',
     ];
 
     public function emisor()
