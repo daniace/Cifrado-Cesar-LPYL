@@ -49,7 +49,7 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="nombre_usuario"
-                                    placeholder="JPerez01"
+                                    placeholder="Nombre de Usuario"
                                 />
                                 <InputError message={errors.nombre_usuario} />
                             </div>
