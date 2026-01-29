@@ -33,7 +33,7 @@ test('two factor challenge can be rendered', function () {
     ])->save();
 
     $this->post(route('login'), [
-        'email' => $user->email,
+        'nombre_usuario' => $user->nombre_usuario,
         'password' => 'password',
     ]);
 
