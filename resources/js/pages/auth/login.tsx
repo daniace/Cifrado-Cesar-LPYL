@@ -38,18 +38,20 @@ export default function Login({
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="nombre_usuario">
+                                    Nombre de Usuario
+                                </Label>
                                 <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
+                                    id="nombre_usuario"
+                                    type="text"
+                                    name="nombre_usuario"
                                     required
                                     autoFocus
                                     tabIndex={1}
-                                    autoComplete="email"
-                                    placeholder="email@example.com"
+                                    autoComplete="nombre_usuario"
+                                    placeholder="JPerez01"
                                 />
-                                <InputError message={errors.email} />
+                                <InputError message={errors.nombre_usuario} />
                             </div>
 
                             <div className="grid gap-2">

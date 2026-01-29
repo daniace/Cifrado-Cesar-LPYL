@@ -26,19 +26,57 @@ export default function Register() {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="nombre">Nombre</Label>
                                 <Input
-                                    id="name"
+                                    id="nombre"
                                     type="text"
                                     required
                                     autoFocus
                                     tabIndex={1}
-                                    autoComplete="name"
-                                    name="name"
-                                    placeholder="Full name"
+                                    autoComplete="nombre"
+                                    name="nombre"
+                                    placeholder="Nombre"
                                 />
                                 <InputError
-                                    message={errors.name}
+                                    message={errors.nombre}
+                                    className="mt-2"
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="apellido">Apellido</Label>
+                                <Input
+                                    id="apellido"
+                                    type="text"
+                                    required
+                                    autoFocus
+                                    tabIndex={2}
+                                    autoComplete="apellido"
+                                    name="apellido"
+                                    placeholder="Apellido"
+                                />
+                                <InputError
+                                    message={errors.apellido}
+                                    className="mt-2"
+                                />
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="nombre_usuario">
+                                    Nombre de Usuario
+                                </Label>
+                                <Input
+                                    id="nombre_usuario"
+                                    type="text"
+                                    required
+                                    autoFocus
+                                    tabIndex={3}
+                                    autoComplete="nombre_usuario"
+                                    name="nombre_usuario"
+                                    placeholder="Nombre de Usuario"
+                                />
+                                <InputError
+                                    message={errors.nombre_usuario}
                                     className="mt-2"
                                 />
                             </div>
@@ -49,7 +87,7 @@ export default function Register() {
                                     id="email"
                                     type="email"
                                     required
-                                    tabIndex={2}
+                                    tabIndex={4}
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
@@ -63,7 +101,7 @@ export default function Register() {
                                     id="password"
                                     type="password"
                                     required
-                                    tabIndex={3}
+                                    tabIndex={5}
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Password"
@@ -79,7 +117,7 @@ export default function Register() {
                                     id="password_confirmation"
                                     type="password"
                                     required
-                                    tabIndex={4}
+                                    tabIndex={6}
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Confirm password"
@@ -92,7 +130,7 @@ export default function Register() {
                             <Button
                                 type="submit"
                                 className="mt-2 w-full"
-                                tabIndex={5}
+                                tabIndex={7}
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
