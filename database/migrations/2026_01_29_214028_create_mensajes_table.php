@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('desplazamiento');
             $table->json('excepciones_asunto')->nullable();
             $table->json('excepciones_contenido')->nullable();
-            $table->foreignId('id_emisor')->constrained('usuarios');
-            $table->foreignId('id_receptor')->constrained('usuarios');
+            $table->foreignId('id_emisor')->constrained('users');
+            $table->foreignId('id_receptor')->constrained('users');
             $table->boolean('leido')->default(false);
             $table->uuid('id_conversacion')->unique();
             $table->foreignId('id_mensaje_anterior')->nullable()->constrained('mensajes');

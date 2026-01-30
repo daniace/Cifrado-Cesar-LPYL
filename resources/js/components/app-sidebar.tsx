@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, Inbox, LayoutGrid, MailPlus } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -13,6 +13,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index, create } from '@/routes/mensajes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
@@ -22,17 +23,27 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Mensajes',
+        href: index().url,
+        icon: Inbox,
+    },
+    {
+        title: 'Redactar',
+        href: create().url,
+        icon: MailPlus,
+    }
 ];
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
+        title: 'Repositorio',
+        href: 'https://github.com/daniace/Cifrado-Cesar-LPYL',
         icon: Folder,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
+        title: 'Documentación',
+        href: 'https://github.com/daniace/Cifrado-Cesar-LPYL/wiki',
         icon: BookOpen,
     },
 ];

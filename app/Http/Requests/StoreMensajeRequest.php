@@ -24,14 +24,28 @@ class StoreMensajeRequest extends FormRequest
         return [
             'asunto' => 'required|string|max:255',
             'contenido' => 'required|string',
-            'desplazamiento' => 'required|integer',
+            'desplazamiento' => 'required|integer|min:1',
             'excepciones_asunto' => 'nullable|array',
             'excepciones_contenido' => 'nullable|array',
-            'id_emisor' => 'required|exists:usuarios,id',
-            'id_receptor' => 'required|exists:usuarios,id',
+            'id_emisor' => 'required|exists:users,id',
+            'id_receptor' => 'required|exists:users,id',
             'leido' => 'required|boolean',
             'id_conversacion' => 'required|uuid|unique:mensajes,id_conversacion',
             'id_mensaje_anterior' => 'nullable|exists:mensajes,id',
         ];
+
+        // // Para propositos de testeo
+        // return [
+        //     'asunto' => 'nullable|string|max:255',
+        //     'contenido' => 'nullable|string',
+        //     'desplazamiento' => 'nullable|integer',
+        //     'excepciones_asunto' => 'nullable|array',
+        //     'excepciones_contenido' => 'nullable|array',
+        //     'id_emisor' => 'nullable|exists:users,id',
+        //     'id_receptor' => 'nullable|exists:users,id',
+        //     'leido' => 'nullable|boolean',
+        //     'id_conversacion' => 'nullable|uuid|unique:mensajes,id_conversacion',
+        //     'id_mensaje_anterior' => 'nullable|exists:mensajes,id',
+        // ];
     }
 }

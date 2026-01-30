@@ -26,7 +26,13 @@ class MensajeController extends Controller
      */
     public function create()
     {
-        //
+        // Todos los usuarios excepto el autenticado
+        $usuarios = User::where('id', '!=', auth()->user()->id)->get();
+
+        return Inertia::render('mensajes/create', [
+            'usuarios' => $usuarios,
+        ]);
+
     }
 
     /**
@@ -35,6 +41,11 @@ class MensajeController extends Controller
     public function store(StoreMensajeRequest $request)
     {
         //
+        $validated = $request->validated();
+
+        Mensaje::create($validated);
+
+        return redirect()->route('mensajes.index');
     }
 
     /**
