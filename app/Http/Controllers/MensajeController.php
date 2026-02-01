@@ -16,8 +16,9 @@ class MensajeController extends Controller
     public function index()
     {
         return Inertia::render('mensajes/index', [
-            'mensajes' => Mensaje::all(),
-            'remitente' => User::where('id', '=', auth()->user()->id)->get(),
+            $usuarioAutenticado = auth()->user()->id,
+            
+            'mensajes' => Mensaje::where('id_receptor', '=', $usuarioAutenticado)->get(),
         ]);
     }
 
@@ -41,6 +42,7 @@ class MensajeController extends Controller
     public function store(StoreMensajeRequest $request)
     {
         //
+        // dd($request->all());
         $validated = $request->validated();
 
         Mensaje::create($validated);

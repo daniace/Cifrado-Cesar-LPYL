@@ -20,11 +20,16 @@ export default function cifrar(texto: string, desplazamiento: number): TextoCifr
     for (let i = 0; i < normalizado.length; i++) {
         const codigo = normalizado.charCodeAt(i);
 
+        // Mayusculas
         if (codigo >= 65 && codigo <= 90) {
             cifrado += String.fromCharCode(((codigo - 65 + desplazamiento) % 26 + 26) % 26 + 65);
-        } else if (codigo >= 97 && codigo <= 122) {
+        }
+        // Minusculas
+        else if (codigo >= 97 && codigo <= 122) {
             cifrado += String.fromCharCode(((codigo - 97 + desplazamiento) % 26 + 26) % 26 + 97);
-        } else if (codigo >= 48 && codigo <= 57) {
+        }
+        // Numeros
+        else if (codigo >= 48 && codigo <= 57) {
             cifrado += String.fromCharCode(((codigo - 48 + desplazamiento) % 10 + 10) % 10 + 48);
         } else {
             cifrado += normalizado[i];

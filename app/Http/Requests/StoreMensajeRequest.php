@@ -30,7 +30,7 @@ class StoreMensajeRequest extends FormRequest
             'id_emisor' => 'required|exists:users,id',
             'id_receptor' => 'required|exists:users,id',
             'leido' => 'required|boolean',
-            'id_conversacion' => 'required|uuid|unique:mensajes,id_conversacion',
+            'id_conversacion' => 'required|uuid',
             'id_mensaje_anterior' => 'nullable|exists:mensajes,id',
         ];
 
@@ -44,7 +44,7 @@ class StoreMensajeRequest extends FormRequest
         //     'id_emisor' => 'nullable|exists:users,id',
         //     'id_receptor' => 'nullable|exists:users,id',
         //     'leido' => 'nullable|boolean',
-        //     'id_conversacion' => 'nullable|uuid|unique:mensajes,id_conversacion',
+        //     'id_conversacion' => 'nullable|uuid',
         //     'id_mensaje_anterior' => 'nullable|exists:mensajes,id',
         // ];
     }
