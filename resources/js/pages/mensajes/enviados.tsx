@@ -1,6 +1,6 @@
 import { Head, Form, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
-import { index } from '@/routes/mensajes';
+import { enviados } from '@/routes/mensajes';
 import type { BreadcrumbItem } from '@/types';
 import { MensajeModelo } from '@/types/mensaje-modelo';
 import { User } from '@/types/auth';
@@ -12,23 +12,24 @@ import cifrar from '@/lib/cifrar';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Index',
-        href: index().url,
+        title: 'Enviados',
+        href: enviados().url,
     },
 ];
 
-export default function Index({ mensajes }: { mensajes: MensajeModelo[] }) {
+export default function Enviados({ mensajes }: { mensajes: MensajeModelo[] }) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const [mensajeSeleccionado, setMensajeSeleccionado] = useState<MensajeModelo | null>(null);
 
     const conversaciones = useMemo(() => {
         const map = new Map<string, MensajeModelo>();
-        // Iterate in reverse to get the latest message as the representative if we want,
-        // or just iterate and let the last one overwrite (since they are ASC, last = newest).
-        mensajes.forEach((m) => {
+        // Itera sobre los mensajes en reversa para obtener el último mensaje como representante
+        // (último mensaje enviado), para que aparezcan en orden cronológico (último mensaje primero)
+        // y evitar que se repitan las conversaciones (último mensaje enviado).
+        mensajes.reverse().forEach((m) => {
             map.set(m.id_conversacion, m);
         });
-        // Sort by created_at desc for the list
+        // Ordenados por fecha de creación desc
         return Array.from(map.values()).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     }, [mensajes]);
 

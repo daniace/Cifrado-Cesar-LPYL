@@ -16,5 +16,6 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('mensajes', MensajeController::class)->middleware('auth');
+Route::get('/enviados', [MensajeController::class, 'enviados'])->name('mensajes.enviados')->middleware('auth');
 
 require __DIR__.'/settings.php';

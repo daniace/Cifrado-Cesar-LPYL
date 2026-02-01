@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Inbox, LayoutGrid, MailPlus } from 'lucide-react';
+import { BookOpen, Folder, Inbox, LayoutGrid, MailPlus, Send } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -12,26 +12,20 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
-import { index, create } from '@/routes/mensajes';
+import mensajes, { index, create, enviados } from '@/routes/mensajes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
     {
         title: 'Mensajes',
         href: index().url,
         icon: Inbox,
     },
     {
-        title: 'Redactar',
-        href: create().url,
-        icon: MailPlus,
+        title: 'Enviados',
+        href: enviados().url,
+        icon: Send,
     }
 ];
 
@@ -55,10 +49,17 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={index().url} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
+                        <SidebarMenuButton size="lg" asChild className='bg-primary text-white hover:bg-primary/80 mt-2'>
+                            <Link href={create().url} prefetch>
+                                <MailPlus className='text-black' />
+                                <span className='text-black'>Redactar</span>
+                            </Link>
+                        </SidebarMenuButton>
+
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>

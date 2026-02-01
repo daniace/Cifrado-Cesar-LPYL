@@ -10,4 +10,6 @@ export interface MensajeModelo {
     leido: boolean;
     id_conversacion: string;
     id_mensaje_anterior: number;
+    created_at: string;
+    updated_at: string;
 }
