@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Inbox, LayoutGrid, MailPlus, Send } from 'lucide-react';
+import { BookOpen, Folder, Inbox, MailPlus, Send } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -12,7 +12,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import mensajes, { index, create, enviados } from '@/routes/mensajes';
+import { index, create, enviados } from '@/routes/mensajes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 

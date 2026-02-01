@@ -23,13 +23,9 @@ export default function Enviados({ mensajes }: { mensajes: MensajeModelo[] }) {
 
     const conversaciones = useMemo(() => {
         const map = new Map<string, MensajeModelo>();
-        // Itera sobre los mensajes en reversa para obtener el último mensaje como representante
-        // (último mensaje enviado), para que aparezcan en orden cronológico (último mensaje primero)
-        // y evitar que se repitan las conversaciones (último mensaje enviado).
         mensajes.reverse().forEach((m) => {
             map.set(m.id_conversacion, m);
         });
-        // Ordenados por fecha de creación desc
         return Array.from(map.values()).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     }, [mensajes]);
 

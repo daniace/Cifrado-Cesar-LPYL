@@ -9,6 +9,7 @@ import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { store } from '@/routes/mensajes';
 import cifrar from '@/lib/cifrar';
+import { DialogBienvenida } from './componentes/dialog-bienvenida';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -17,18 +18,19 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ mensajes }: { mensajes: MensajeModelo[] }) {
+interface Props {
+    mensajes: MensajeModelo[],
+}
+
+export default function Index({ mensajes }: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const [mensajeSeleccionado, setMensajeSeleccionado] = useState<MensajeModelo | null>(null);
 
     const conversaciones = useMemo(() => {
         const map = new Map<string, MensajeModelo>();
-        // Iterate in reverse to get the latest message as the representative if we want,
-        // or just iterate and let the last one overwrite (since they are ASC, last = newest).
         mensajes.forEach((m) => {
             map.set(m.id_conversacion, m);
         });
-        // Sort by created_at desc for the list
         return Array.from(map.values()).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     }, [mensajes]);
 
@@ -42,6 +44,9 @@ export default function Index({ mensajes }: { mensajes: MensajeModelo[] }) {
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
+            {usePage<{ flash: { mostrar_dialog_bienvenida: boolean } }>().props.flash.mostrar_dialog_bienvenida && (
+                <DialogBienvenida mensajesDesdeUltimoAcceso={mensajes} />
+            )}
             <Head title="Index" />
             <div className='grid grid-cols-2 gap-4 py-4'>
                 <div id='lista-mensajes' className='border border-gray-300 rounded-lg p-4'>
