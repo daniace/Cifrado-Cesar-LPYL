@@ -39,7 +39,7 @@ export default function Enviados({ mensajes }: { mensajes: MensajeModelo[] }) {
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Index" />
+            <Head title="Enviados" />
             <div className='grid grid-cols-2 gap-4 py-4'>
                 <div id='lista-mensajes' className='border border-gray-300 rounded-lg p-4'>
                     <h1 className='font-bold'>Mensajes</h1>

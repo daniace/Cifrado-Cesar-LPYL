@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Create({ usuarios }: { usuarios: User[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Index" />
+            <Head title="Redactar Mensaje" />
             <div>
                 <FormRedactar usuarios={usuarios} onUsuarioSelect={() => { }} />
             </div>

@@ -75,7 +75,11 @@ class MensajeController extends Controller
      */
     public function update(UpdateMensajeRequest $request, Mensaje $mensaje)
     {
-        //
+        // dd($request->all());
+        if ($request->validated()) {
+            $mensaje->marcarLeido();
+        }
+        return back();
     }
 
     /**

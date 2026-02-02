@@ -43,4 +43,9 @@ class Mensaje extends Model
     {
         return $this->belongsTo(Mensaje::class, 'id_mensaje_anterior');
     }
+
+    public function marcarLeido() : bool
+    {
+        return $this->update(['leido' => true]);
+    }
 }

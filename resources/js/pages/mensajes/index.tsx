@@ -1,6 +1,6 @@
-import { Head, Form, usePage } from '@inertiajs/react';
+import { Head, Form, usePage, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
-import { index } from '@/routes/mensajes';
+import { index, update } from '@/routes/mensajes';
 import type { BreadcrumbItem } from '@/types';
 import { MensajeModelo } from '@/types/mensaje-modelo';
 import { User } from '@/types/auth';
@@ -10,10 +10,11 @@ import { Input } from '@/components/ui/input';
 import { store } from '@/routes/mensajes';
 import cifrar from '@/lib/cifrar';
 import { DialogBienvenida } from './componentes/dialog-bienvenida';
+import { Circle } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Index',
+        title: 'Mensajes',
         href: index().url,
     },
 ];
@@ -41,33 +42,55 @@ export default function Index({ mensajes }: Props) {
 
     const handleMensajeSeleccionado = (mensaje: MensajeModelo) => {
         setMensajeSeleccionado(mensaje);
+
+        if (mensaje.id_receptor === auth.user.id && !mensaje.leido) {
+            router.patch(update(mensaje.id).url, { leido: true }, {
+                preserveScroll: true,
+                preserveState: true,
+            });
+        }
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             {usePage<{ flash: { mostrar_dialog_bienvenida: boolean } }>().props.flash.mostrar_dialog_bienvenida && (
                 <DialogBienvenida mensajesSinFiltrar={mensajes} />
             )}
-            <Head title="Index" />
+            <Head title="Mensajes" />
+
+            {/* LISTA DE MENSAJES RECIBIDOS - CHATS (REMITENTE, ASUNTO, FECHA, LEIDO/NO LEIDO) ORDEN DESCENDENTE */}
+
             <div className='grid grid-cols-2 gap-4 py-4'>
                 <div id='lista-mensajes' className='border border-gray-300 rounded-lg p-4'>
                     <h1 className='font-bold'>Mensajes</h1>
                     <ul>
+
                         {conversaciones.map((mensaje) => (
-                            <li
+                            <div
                                 key={mensaje.id_conversacion}
-                                onClick={() => handleMensajeSeleccionado(mensaje)}
+                                onClick={() => {
+                                    handleMensajeSeleccionado(mensaje);
+                                }}
                                 className={`border border-gray-300 rounded-lg p-2 cursor-pointer hover:bg-gray-800 mb-2 ${mensajeSeleccionado?.id_conversacion === mensaje.id_conversacion ? 'bg-gray-800' : ''}`}
                             >
-                                <span className='font-bold block text-sm mb-1 truncate'>
-                                    {descifrar(mensaje.asunto, mensaje.desplazamiento, mensaje.excepciones_asunto)}
-                                </span>
-                                <span className='text-xs text-gray-500 truncate block'>
-                                    {descifrar(String(mensaje.contenido), Number(mensaje.desplazamiento), mensaje.excepciones_contenido as Record<number, string>)}
-                                </span>
-                            </li>
+                                <div className="grid grid-cols-2 w-full">
+                                    <div className="col-start-1 row-start-1 font-bold">{descifrar(mensaje.asunto, mensaje.desplazamiento, mensaje.excepciones_asunto)}</div>
+                                    <div className="col-start-1 row-start-2 text-xs text-gray-500 truncate block">{descifrar(String(mensaje.contenido), Number(mensaje.desplazamiento), mensaje.excepciones_contenido as Record<number, string>)}</div>
+                                    <div className="col-end-4 row-start-1">{new Date(mensaje.created_at).toLocaleString('es-AR', { day: 'numeric', month: 'numeric', year: 'numeric' })}</div>
+                                    <div className="col-end-4 row-start-2 flex items-center justify-end">
+                                        {mensaje.leido ? (
+                                            <Circle className="w-4 h-4 text-green-500 fill-green-500" />
+                                        ) : (
+                                            <Circle className="w-4 h-4 text-blue-500 fill-blue-500" />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </ul>
                 </div>
+
+                {/* LISTA DEL DETALLE DEL MENSAJE SELECCIONADO - CHAT - LOS ATRIBUTOS DEL RECIBIDO + CONTENIDO Y POSIBILIDAD DE RESPUESTA */}
+
                 <div id='detalle-mensaje' className='border border-gray-300 rounded-lg p-4'>
                     <h1 className='font-bold'>Detalle del mensaje</h1>
                     {mensajesConversacion.length > 0 ? (
@@ -95,6 +118,9 @@ export default function Index({ mensajes }: Props) {
                         <p className="text-gray-500 italic">Selecciona una conversación.</p>
                     )}
                     <div className='flex gap-2 mt-2' style={{ display: mensajeSeleccionado ? 'flex' : 'none' }}>
+
+                        {/* FORMULARIO PARA RESPONDER AL MENSAJE SELECCIONADO - CHAT SELECCIONADO */}
+
                         <Form
                             method='post'
                             action={store().url}
