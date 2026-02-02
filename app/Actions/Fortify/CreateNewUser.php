@@ -31,7 +31,7 @@ class CreateNewUser implements CreatesNewUsers
             'nombre_usuario' => $input['nombre_usuario'],
             'email' => $input['email'],
             'password' => $input['password'],
-            'ultima_conexion' => now(),
+            'ultima_conexion' => null,
         ]);
     }
 }

@@ -9,7 +9,7 @@ export type User = {
     two_factor_enabled?: boolean;
     created_at: string;
     updated_at: string;
-    ultima_conexion: string | null;
+    ultima_conexion: string;
     [key: string]: unknown;
 };
 

@@ -45,7 +45,7 @@ export default function Index({ mensajes }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             {usePage<{ flash: { mostrar_dialog_bienvenida: boolean } }>().props.flash.mostrar_dialog_bienvenida && (
-                <DialogBienvenida mensajesDesdeUltimoAcceso={mensajes} />
+                <DialogBienvenida mensajesSinFiltrar={mensajes} />
             )}
             <Head title="Index" />
             <div className='grid grid-cols-2 gap-4 py-4'>
