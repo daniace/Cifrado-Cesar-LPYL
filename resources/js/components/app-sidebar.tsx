@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Inbox, MailPlus, Send } from 'lucide-react';
+import { BookOpen, Folder, Inbox, MailPlus } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -12,21 +12,16 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { index, create, enviados } from '@/routes/mensajes';
+import { index, create } from '@/actions/App/Http/Controllers/ConversacionController';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Mensajes',
+        title: 'Conversaciones',
         href: index().url,
         icon: Inbox,
     },
-    {
-        title: 'Enviados',
-        href: enviados().url,
-        icon: Send,
-    }
 ];
 
 const footerNavItems: NavItem[] = [
@@ -56,7 +51,7 @@ export function AppSidebar() {
                         <SidebarMenuButton size="lg" asChild className='bg-primary text-white hover:bg-primary/80 mt-2'>
                             <Link href={create().url} prefetch>
                                 <MailPlus className='text-black' />
-                                <span className='text-black'>Redactar</span>
+                                <span className='text-black'>Nueva Conversación</span>
                             </Link>
                         </SidebarMenuButton>
 
