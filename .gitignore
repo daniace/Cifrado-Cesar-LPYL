@@ -26,3 +26,11 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# AI Tools
+/.gemini
+/.opencode
+GEMINI.md
+AGENTS.md
+boost.json
+opencode.json
