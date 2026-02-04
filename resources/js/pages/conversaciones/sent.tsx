@@ -1,9 +1,9 @@
 import { Head, usePage, usePoll } from '@inertiajs/react';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import type { User } from '@/types/auth';
-import { index } from '@/actions/App/Http/Controllers/ConversacionController';
+import { sent } from '@/actions/App/Http/Controllers/ConversacionController';
 import { getMensajes } from '@/actions/App/Http/Controllers/ConversacionController';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,8 +13,8 @@ import { MailDisplay, type ConversacionCompleta } from './componentes/mail-displ
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Inbox',
-        href: index().url,
+        title: 'Enviados',
+        href: sent().url,
     },
 ];
 
@@ -22,7 +22,7 @@ interface Props {
     conversaciones: Conversacion[];
 }
 
-export default function Index({ conversaciones }: Props) {
+export default function Sent({ conversaciones }: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const [selectedConversacion, setSelectedConversacion] = useState<ConversacionCompleta | null>(null);
     const [loading, setLoading] = useState(false);
@@ -50,30 +50,6 @@ export default function Index({ conversaciones }: Props) {
             handleSelect({ id: selectedConversacion.id } as Conversacion);
         }
     }, [selectedConversacion, handleSelect]);
-
-    // Auto-refresh selected conversation
-    useEffect(() => {
-        if (!selectedConversacion || loading) return;
-
-        const refreshInterval = setInterval(async () => {
-            try {
-                const response = await fetch(getMensajes(selectedConversacion.id).url);
-                const data = await response.json();
-
-                // Only update if we still have the same conversation selected
-                setSelectedConversacion(prev => {
-                    if (prev?.id === data.id) {
-                        return data;
-                    }
-                    return prev;
-                });
-            } catch (error) {
-                console.error('Error auto-refreshing conversation:', error);
-            }
-        }, 4000); // Slightly offset from the main poll or same interval
-
-        return () => clearInterval(refreshInterval);
-    }, [selectedConversacion?.id, loading]);
 
     // Filter for unread
     const unreadConversaciones = conversaciones.filter(

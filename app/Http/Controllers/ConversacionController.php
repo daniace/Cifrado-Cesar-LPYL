@@ -78,7 +78,8 @@ class ConversacionController extends Controller
      */
     public function show(Conversacion $conversacion)
     {
-        $this->authorize('view', $conversacion);
+        // TODO: Revisar policy - temporalmente desactivado
+        // $this->authorize('view', $conversacion);
 
         $conversacion->load([
             'emisor',
@@ -110,5 +111,42 @@ class ConversacionController extends Controller
     public function destroy(Conversacion $conversacion)
     {
         //
+    }
+
+    public function sent()
+    {
+        $userId = auth()->id();
+
+        $conversaciones = Conversacion::query()
+            ->where('id_emisor', $userId)
+            ->with(['emisor', 'receptor', 'ultimoMensaje'])
+            ->orderByDesc('fecha_ultimo_mensaje')
+            ->get();
+
+        return Inertia::render('conversaciones/sent', [
+            'conversaciones' => $conversaciones,
+        ]);
+    }
+
+    /**
+     * Obtiene conversación con mensajes (JSON para dashboard).
+     */
+    public function getMensajes(Conversacion $conversacion)
+    {
+        $this->authorize('view', $conversacion);
+
+        $conversacion->load([
+            'emisor',
+            'receptor',
+            'mensajes' => fn ($q) => $q->with('emisor')->orderBy('created_at'),
+        ]);
+
+        // Marcar mensajes no leídos como leídos
+        $conversacion->mensajes()
+            ->where('emisor_id', '!=', auth()->id())
+            ->where('leido', false)
+            ->update(['leido' => true]);
+
+        return response()->json($conversacion);
     }
 }

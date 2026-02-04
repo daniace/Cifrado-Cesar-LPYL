@@ -9,6 +9,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { home } from '@/routes';
+import IconoCipherMail from '@/pages/conversaciones/componentes/icono-cipher-mail';
 
 export default function AuthCardLayout({
     children,
@@ -27,7 +28,7 @@ export default function AuthCardLayout({
                     className="flex items-center gap-2 self-center font-medium"
                 >
                     <div className="flex h-9 w-9 items-center justify-center">
-                        <AppLogoIcon className="size-9 fill-current text-black dark:text-white" />
+                        <IconoCipherMail className="size-9 fill-current text-black dark:text-white" />
                     </div>
                 </Link>
 

@@ -1,4 +1,4 @@
-import { Head, Form, usePage } from '@inertiajs/react';
+import { Head, Form, usePage, usePoll } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { User } from '@/types/auth';
@@ -40,6 +40,10 @@ interface Props {
 
 export default function Show({ conversacion }: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
+
+    usePoll(5000, {
+        only: ['conversacion'],
+    });
 
     const asuntoDescifrado = descifrar(
         conversacion.asunto,

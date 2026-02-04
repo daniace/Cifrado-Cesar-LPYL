@@ -17,11 +17,19 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('conversaciones/sent', [ConversacionController::class, 'sent'])
+        ->name('conversaciones.sent');
+
+    Route::get('conversaciones/{conversacion}/mensajes', [ConversacionController::class, 'getMensajes'])
+        ->name('conversaciones.mensajes');
+
     Route::resource('conversaciones', ConversacionController::class)
-        ->only(['index', 'create', 'store', 'show']);
+        ->only(['index', 'create', 'store', 'show'])
+        ->parameters(['conversaciones' => 'conversacion']);
 
     Route::resource('conversaciones.mensajes', MensajeController::class)
-        ->only(['store']);
+        ->only(['store'])
+        ->parameters(['conversaciones' => 'conversacion']);
 
     Route::patch('/mensajes/{mensaje}', [MensajeController::class, 'update'])
         ->name('mensajes.update');
