@@ -53,4 +53,24 @@ class User extends Authenticatable
             'ultima_conexion' => 'datetime',
         ];
     }
+
+    public function avatar(): string
+    {
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->nombre_usuario);
+    }
+
+    public function getNombreUsuario(): string
+    {
+        return $this->nombre_usuario;
+    }
+
+    public function getNombreCompleto(): string
+    {
+        return $this->nombre . ' ' . $this->apellido;
+    }
+
+    protected function getId(): int
+    {
+        return $this->id;
+    }
 }

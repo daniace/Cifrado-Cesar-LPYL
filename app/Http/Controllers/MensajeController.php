@@ -15,14 +15,19 @@ class MensajeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('mensajes/index', [
+        $usuarioAutenticado = auth()->user()->id;
 
-            $usuarioAutenticado = auth()->user()->id,
-            
-            'mensajes' => Mensaje::where(function ($query) use ($usuarioAutenticado) {
-                $query->where('id_receptor', $usuarioAutenticado)
-                      ->orWhere('id_emisor', $usuarioAutenticado);
-            })->orderBy('created_at', 'asc')->get(),
+        $mensajes = Mensaje::where(function ($query) use ($usuarioAutenticado) {
+            $query->where('id_receptor', $usuarioAutenticado);
+        })->orderBy('created_at', 'asc')->get();
+
+        foreach ($mensajes as $mensaje) {
+            $emisores[] = User::where('id', '=', $mensaje->id_emisor)->first();
+        }
+
+        return Inertia::render('mensajes/index', [
+            'mensajes' => $mensajes,
+            'emisores' => $emisores,
         ]);
     }
 
@@ -60,6 +65,10 @@ class MensajeController extends Controller
     public function show(Mensaje $mensaje)
     {
         //
+        return Inertia::render('mensajes/componentes/test-detalle', [
+            'mensajes' => Mensaje::where('id_conversacion', $mensaje->id_conversacion)->get(),
+            'usuario' => User::where('id', $mensaje->id_emisor)->first(),
+        ]);
     }
 
     /**

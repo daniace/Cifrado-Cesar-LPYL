@@ -11,6 +11,7 @@ import { store } from '@/routes/mensajes';
 import cifrar from '@/lib/cifrar';
 import { DialogBienvenida } from './componentes/dialog-bienvenida';
 import { Circle } from 'lucide-react';
+import Test_Detalle from './componentes/test-detalle';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,9 +22,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Props {
     mensajes: MensajeModelo[],
+    emisores: User[],
 }
 
-export default function Index({ mensajes }: Props) {
+export default function Index({ mensajes, emisores }: Props) {
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const [mensajeSeleccionado, setMensajeSeleccionado] = useState<MensajeModelo | null>(null);
 
@@ -90,6 +92,7 @@ export default function Index({ mensajes }: Props) {
                 </div>
 
                 {/* LISTA DEL DETALLE DEL MENSAJE SELECCIONADO - CHAT - LOS ATRIBUTOS DEL RECIBIDO + CONTENIDO Y POSIBILIDAD DE RESPUESTA */}
+
 
                 <div id='detalle-mensaje' className='border border-gray-300 rounded-lg p-4'>
                     <h1 className='font-bold'>Detalle del mensaje</h1>
@@ -176,6 +179,7 @@ export default function Index({ mensajes }: Props) {
                         </Form>
                     </div>
                 </div>
+                <Test_Detalle mensajes={mensajes} emisores={emisores} />
             </div>
         </AppLayout>
     );
