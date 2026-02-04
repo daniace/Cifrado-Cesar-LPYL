@@ -18,5 +18,5 @@ test('new users can register', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('mensajes.index', absolute: false));
+    $response->assertRedirect(route('conversaciones.index', absolute: false));
 });

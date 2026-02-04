@@ -24,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        \Illuminate\Support\Facades\Gate::policy(
+            \App\Models\Conversacion::class,
+            \App\Policies\ConversacionPolicy::class
+        );
     }
 
     protected function configureDefaults(): void

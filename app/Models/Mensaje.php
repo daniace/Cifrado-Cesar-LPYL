@@ -4,47 +4,40 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Mensaje extends Model
 {
-    /** @use HasFactory<\Database\Factories\MensajeFactory> */
     use HasFactory;
 
     protected $fillable = [
-        'asunto',
+        'conversacion_id',
+        'emisor_id',
         'contenido',
-        'desplazamiento',
-        'excepciones_asunto',
+        'desplazamiento_contenido',
         'excepciones_contenido',
-        'id_emisor',
-        'id_receptor',
         'leido',
-        'id_conversacion',
-        'id_mensaje_anterior',
     ];
 
-    protected $casts = [
-        'leido' => 'boolean',
-        'excepciones_asunto' => 'array',
-        'excepciones_contenido' => 'array',
-    ];
-
-    public function emisor()
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class, 'id_emisor');
+        return [
+            'leido' => 'boolean',
+            'excepciones_contenido' => 'array',
+        ];
     }
 
-    public function receptor()
+    public function conversacion(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_receptor');
+        return $this->belongsTo(Conversacion::class, 'conversacion_id');
     }
 
-    public function anterior()
+    public function emisor(): BelongsTo
     {
-        return $this->belongsTo(Mensaje::class, 'id_mensaje_anterior');
+        return $this->belongsTo(User::class, 'emisor_id');
     }
 
-    public function marcarLeido() : bool
+    public function marcarLeido(): bool
     {
         return $this->update(['leido' => true]);
     }

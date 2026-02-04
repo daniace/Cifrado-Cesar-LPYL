@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function avatar(): string
     {
-        return 'https://ui-avatars.com/api/?name=' . urlencode($this->nombre_usuario);
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->nombre_usuario);
     }
 
     public function getNombreUsuario(): string
@@ -66,11 +66,21 @@ class User extends Authenticatable
 
     public function getNombreCompleto(): string
     {
-        return $this->nombre . ' ' . $this->apellido;
+        return $this->nombre.' '.$this->apellido;
     }
 
     protected function getId(): int
     {
         return $this->id;
+    }
+
+    public function conversacionesEnviadas(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Conversacion::class, 'id_emisor');
+    }
+
+    public function conversacionesRecibidas(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Conversacion::class, 'id_receptor');
     }
 }

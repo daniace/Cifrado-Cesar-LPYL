@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\ConversacionController;
+use App\Http\Controllers\MensajeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
-use App\Http\Controllers\MensajeController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
@@ -15,7 +16,15 @@ Route::get('dashboard', function () {
     return Inertia::render('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('mensajes', MensajeController::class)->middleware('auth');
-Route::get('/enviados', [MensajeController::class, 'enviados'])->name('mensajes.enviados')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::resource('conversaciones', ConversacionController::class)
+        ->only(['index', 'create', 'store', 'show']);
+
+    Route::resource('conversaciones.mensajes', MensajeController::class)
+        ->only(['store']);
+
+    Route::patch('/mensajes/{mensaje}', [MensajeController::class, 'update'])
+        ->name('mensajes.update');
+});
 
 require __DIR__.'/settings.php';
