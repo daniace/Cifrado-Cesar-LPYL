@@ -13,8 +13,8 @@ class ConversacionPolicy
      */
     public function view(User $user, Conversacion $conversacion): bool
     {
-        return $user->id === $conversacion->id_emisor
-            || $user->id === $conversacion->id_receptor;
+        return (int) $user->id === (int) $conversacion->id_emisor
+            || (int) $user->id === (int) $conversacion->id_receptor;
     }
 
     /**
