@@ -1,15 +1,15 @@
+import { User } from "./auth";
+
 export interface MensajeModelo {
     id: number;
-    asunto: string;
+    conversacion_id: number;
+    emisor_id: number;
     contenido: string;
-    desplazamiento: number;
-    excepciones_asunto: Record<number, string>;
-    excepciones_contenido: Record<number, string>;
-    id_emisor: number;
-    id_receptor: number;
+    desplazamiento_contenido: number;
+    excepciones_contenido: Record<number, string> | null;
     leido: boolean;
-    id_conversacion: string;
-    id_mensaje_anterior: number;
     created_at: string;
     updated_at: string;
+    // Relaciones cargadas
+    emisor?: User;
 }

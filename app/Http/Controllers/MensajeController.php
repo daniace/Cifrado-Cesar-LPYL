@@ -4,99 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMensajeRequest;
 use App\Http\Requests\UpdateMensajeRequest;
+use App\Models\Conversacion;
 use App\Models\Mensaje;
-use App\Models\User;
-use Inertia\Inertia;
 
 class MensajeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Crea nuevo mensaje en una conversación existente.
+     * Ruta: POST /conversaciones/{conversacion}/mensajes
      */
-    public function index()
+    public function store(StoreMensajeRequest $request, Conversacion $conversacion)
     {
-        return Inertia::render('mensajes/index', [
+        $usuarioAutenticado = auth()->id();
 
-            $usuarioAutenticado = auth()->user()->id,
-            
-            'mensajes' => Mensaje::where(function ($query) use ($usuarioAutenticado) {
-                $query->where('id_receptor', $usuarioAutenticado)
-                      ->orWhere('id_emisor', $usuarioAutenticado);
-            })->orderBy('created_at', 'asc')->get(),
-        ]);
-    }
+        // Verificar que el usuario puede responder (sin policy)
+        // if ($conversacion->id_emisor !== $userId && $conversacion->id_receptor !== $userId) {
+        //     abort(403, 'No tienes acceso a esta conversación.');
+        // }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Todos los usuarios excepto el autenticado
-        $usuarios = User::where('id', '!=', auth()->user()->id)->get();
-
-        return Inertia::render('mensajes/create', [
-            'usuarios' => $usuarios,
-        ]);
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreMensajeRequest $request)
-    {
-        //
-        // dd($request->all());
         $validated = $request->validated();
 
-        Mensaje::create($validated);
+        Mensaje::create([
+            'conversacion_id' => $conversacion->id,
+            'emisor_id' => $usuarioAutenticado,
+            'contenido' => $validated['contenido'],
+            'desplazamiento_contenido' => $validated['desplazamiento_contenido'],
+            'excepciones_contenido' => $validated['excepciones_contenido'] ?? null,
+        ]);
 
-        return redirect()->route('mensajes.index');
-    }
+        // Actualizar fecha_ultimo_mensaje
+        $conversacion->update(['fecha_ultimo_mensaje' => now()]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Mensaje $mensaje)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Mensaje $mensaje)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateMensajeRequest $request, Mensaje $mensaje)
-    {
-        // dd($request->all());
-        if ($request->validated()) {
-            $mensaje->marcarLeido();
-        }
         return back();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Marca mensaje como leído.
+     * Ruta: PATCH /mensajes/{mensaje}
      */
-    public function destroy(Mensaje $mensaje)
+    public function update(UpdateMensajeRequest $request, Mensaje $mensaje)
     {
-        //
+        $mensaje->marcarLeido();
+
+        return back();
     }
 
-    public function enviados()
+    public function show(Mensaje $mensaje)
     {
-        $usuarioAutenticado = auth()->user()->id;
-        return Inertia::render('mensajes/enviados', [
-            'mensajes' => Mensaje::where(function ($query) use ($usuarioAutenticado) {
-                $query->where('id_emisor', $usuarioAutenticado);
-            })->orderBy('created_at', 'asc')->get(),
-        ]);
+        dd($mensaje);
     }
 }
