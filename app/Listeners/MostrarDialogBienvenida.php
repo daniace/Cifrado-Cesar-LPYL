@@ -22,11 +22,6 @@ class MostrarDialogBienvenida
      */
     public function handle(Login $event): void
     {
-        $user = User::whereKey($event->user->getAuthIdentifier())->first();
-        // Solo mostrar el dialog si el usuario ya había iniciado sesión antes
-        // Quizas lo cambio para tambien mostrarlo pero cambiar el mensaje de bienvenida
-        if (!is_null($user->ultima_conexion)) {
-            session()->flash('mostrar_dialog_bienvenida', true);
-        }
+        session()->flash('mostrar_dialog_bienvenida', true);
     }
 }

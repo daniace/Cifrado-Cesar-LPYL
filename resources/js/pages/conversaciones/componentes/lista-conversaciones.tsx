@@ -40,6 +40,7 @@ export default function ListaConversaciones({
                 const tieneNoLeidos = conversacion.mensajes?.some(mensaje => mensaje.emisor_id !== auth.user.id && !mensaje.leido);
 
                 return (
+
                     <button
                         key={conversacion.id}
                         onClick={() => {

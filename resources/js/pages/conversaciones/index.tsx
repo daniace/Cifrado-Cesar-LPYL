@@ -64,7 +64,6 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
             )}
 
             <div className="flex flex-col gap-4 p-4">
-                {/* Header con botón de nueva conversación */}
                 <div className="flex items-center">
                     <h1 className="text-2xl font-bold">Recibidos</h1>
                 </div>

@@ -34,12 +34,11 @@ export default function Enviados({ conversaciones, usuarios_receptores }: Props)
             <Head title="Enviados" />
 
             <div className="flex flex-col gap-4 p-4">
-                {/* Header con botón de nueva conversación */}
-                <div className="flex justify-between items-center">
+                <div className="flex items-center">
                     <h1 className="text-2xl font-bold">Enviados</h1>
                 </div>
 
-                <div className="flex flex-row">
+                <div className="flex flex-row gap-2">
                     <ListaConversaciones
                         conversaciones={conversaciones}
                         onSelect={setConversacionSeleccionada}
