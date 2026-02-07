@@ -26,3 +26,8 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.gemini
+/.opencode/skills
+/.github
+agents.md
+gemini.md
