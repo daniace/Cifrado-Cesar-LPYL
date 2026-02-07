@@ -1,12 +1,13 @@
-import { ConversacionModelo } from "@/types/conversacion-modelo";
-import descifrar from "@/lib/descifrar";
-import { usePage, router } from "@inertiajs/react";
-import { User } from "@/types/auth";
-import { leer } from "@/routes/conversaciones";
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+
+import { router, usePage } from "@inertiajs/react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+
+import descifrar from "@/lib/descifrar";
+import { cn } from "@/lib/utils";
+import { leer } from "@/routes/conversaciones";
+import type { User } from "@/types/auth";
+import type { ConversacionModelo } from "@/types/conversacion-modelo";
 
 export default function ListaConversaciones({
     conversaciones,
@@ -37,7 +38,6 @@ export default function ListaConversaciones({
         <div className="flex flex-col gap-2 p-4 pt-0 w-1/2">
             {conversaciones.map((conversacion) => {
                 const tieneNoLeidos = conversacion.mensajes?.some(mensaje => mensaje.emisor_id !== auth.user.id && !mensaje.leido);
-                const ultimoMensaje = conversacion.ultimo_mensaje || conversacion.mensajes?.[conversacion.mensajes.length - 1];
 
                 return (
                     <button

@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Inbox, MailPlus, Send } from 'lucide-react';
+import { BookOpen, Folder, Inbox, Send } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -12,10 +12,10 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import BotonRedactar from '@/pages/conversaciones/componentes/boton-redactar';
 import { index, create, enviados } from '@/routes/conversaciones';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
-import BotonRedactar from '@/pages/conversaciones/componentes/boton-redactar';
 
 const mainNavItems: NavItem[] = [
     {

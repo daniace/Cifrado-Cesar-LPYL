@@ -1,37 +1,29 @@
-import { ConversacionModelo } from "@/types/conversacion-modelo";
-import descifrar from "@/lib/descifrar";
-import cifrar from "@/lib/cifrar";
-import { Form, Link } from "@inertiajs/react";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Send } from "lucide-react";
-import { usePage } from "@inertiajs/react";
-import { User } from "@/types/auth";
-import { useState, useRef, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
-import { Lock } from "lucide-react";
-import { index } from "@/routes/conversaciones";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+
+import { Form, Link, usePage } from "@inertiajs/react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { ArrowLeft, Lock, Send } from "lucide-react";
+import { useState } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import cifrar from "@/lib/cifrar";
+import descifrar from "@/lib/descifrar";
+import { index } from "@/routes/conversaciones";
+import type { User } from "@/types/auth";
+import type { ConversacionModelo } from "@/types/conversacion-modelo";
 
 export default function DetalleConversacion({ conversacion }: { conversacion: ConversacionModelo | null }) {
 
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const [contenido, setContenido] = useState('');
     const [desplazamiento, setDesplazamiento] = useState(1);
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    // Auto-scroll al fondo cuando cambian los mensajes
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
-    }, [conversacion?.mensajes]);
 
     if (!conversacion) {
         return (
@@ -41,7 +33,7 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
         );
     }
 
-    // Determinar el otro usuario en la conversación
+    // Distinguir a los usuarios uno del otro
     const otroUsuario = conversacion.id_emisor === auth.user.id
         ? conversacion.receptor
         : conversacion.emisor;
@@ -91,7 +83,7 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
 
             {/* Mensajes */}
             <ScrollArea className="h-[500px]">
-                <div ref={scrollRef} className="flex-1 overflow-y-auto py-4 space-y-4">
+                <div className="flex-1 overflow-y-auto py-4 space-y-4">
                     {conversacion.mensajes && conversacion.mensajes.length > 0 ? (
                         conversacion.mensajes.map((mensaje) => {
                             const usuarioActual = mensaje.emisor_id === auth.user.id;
@@ -152,7 +144,7 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
                     only: ['conversacion'],
                 }}
             >
-                {({ errors }) => (
+                {() => (
                     <div className="grid gap-4">
                         <Textarea
                             name="contenido"

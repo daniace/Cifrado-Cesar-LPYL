@@ -1,12 +1,14 @@
 import { Head, usePage, usePoll } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
+
 import AppLayout from '@/layouts/app-layout';
+import { index } from '@/routes/conversaciones';
 import type { BreadcrumbItem, User } from '@/types';
-import { ConversacionModelo } from '@/types/conversacion-modelo';
-import { useState, useEffect } from 'react';
+import type { ConversacionModelo } from '@/types/conversacion-modelo';
+
+import DetalleConversacion from './componentes/detalle-conversacion';
 import { DialogBienvenida } from './componentes/dialog-bienvenida';
 import ListaConversaciones from './componentes/lista-conversaciones';
-import DetalleConversacion from './componentes/detalle-conversacion';
-import { index } from '@/routes/conversaciones';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,7 +25,7 @@ interface Props {
 
 export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usuarios_emisores }: Props) {
     const { mostrar_dialog_bienvenida } = usePage<{ mostrar_dialog_bienvenida: boolean }>().props;
-    const [conversacionSeleccionada, setConversacionSeleccionada] = useState<ConversacionModelo | null>(null);
+    const [conversacionSeleccionadaId, setConversacionSeleccionadaId] = useState<number | null>(null);
 
     usePoll(5000, {
         only: ["conversaciones"]
@@ -33,16 +35,25 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
         }
     )
 
-    // Sincronizar conversacion seleccionada con datos actualizados del poll
-    useEffect(() => {
-        if (conversacionSeleccionada) {
-            const actualizada = conversaciones.find(conversacion => conversacion.id === conversacionSeleccionada.id);
-            if (actualizada) {
-                setConversacionSeleccionada(actualizada);
-            }
-        }
-    }, [conversaciones]);
+    // Mandar la conversacion al detalle mensaje
+    const conversacionSeleccionada = useMemo(() => {
+        if (conversacionSeleccionadaId === null) return null;
+        return conversaciones.find(conversacion => conversacion.id === conversacionSeleccionadaId) ?? null;
+    }, [conversaciones, conversacionSeleccionadaId]);
 
+    const handleSelectConversacion = (conversacion: ConversacionModelo | null) => {
+        setConversacionSeleccionadaId(conversacion?.id ?? null);
+    };
+
+    // Alternativa con UseEffect (No se hizo por afectar al rendimiento segun Docs)
+    // useEffect(() => {
+    //     if (conversacionSeleccionadaId !== null) {
+    //         const conversacion = conversaciones.find(conversacion => conversacion.id === conversacionSeleccionadaId);
+    //         if (conversacion) {
+    //             setConversacionSeleccionada(conversacion);
+    //         }
+    //     }
+    // }, [conversaciones, conversacionSeleccionadaId]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -58,10 +69,10 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
                     <h1 className="text-2xl font-bold">Recibidos</h1>
                 </div>
 
-                <div className="flex flex-row gap-4 mt-8">
+                <div className="flex flex-row">
                     <ListaConversaciones
                         conversaciones={conversaciones}
-                        onSelect={setConversacionSeleccionada}
+                        onSelect={handleSelectConversacion}
                         seleccionada={conversacionSeleccionada}
                         usuarios={usuarios_emisores}
                     />

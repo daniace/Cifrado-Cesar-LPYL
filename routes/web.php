@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
         ->name('conversaciones.enviados');
 
     Route::resource('conversaciones', ConversacionController::class)
-        ->only(['index', 'create', 'store', 'show'])
+        ->only(['index', 'create', 'store'])
         ->parameters(['conversaciones' => 'conversacion']);
 
     Route::resource('conversaciones.mensajes', MensajeController::class)

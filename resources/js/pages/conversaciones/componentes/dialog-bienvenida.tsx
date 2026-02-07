@@ -1,3 +1,6 @@
+import { usePage } from "@inertiajs/react"
+import { Inbox } from "lucide-react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -8,10 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { usePage } from "@inertiajs/react"
 import type { User } from "@/types/auth"
-import { Inbox } from "lucide-react"
-import { useState } from "react"
 
 export function DialogBienvenida({ cantidad_mensajes_no_leidos }: { cantidad_mensajes_no_leidos: number }) {
     const { auth } = usePage<{ auth: { user: User } }>().props;

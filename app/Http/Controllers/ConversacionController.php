@@ -98,32 +98,6 @@ class ConversacionController extends Controller
         return redirect()->route('conversaciones.index');
     }
 
-    /**
-     * Muestra conversación con todos sus mensajes (vista tipo chat).
-     */
-    public function show(Conversacion $conversacion)
-    {
-        // dd($conversacion);
-
-        $usuarioAutenticado = auth()->id();
-
-        $conversacion->load([
-            'emisor',
-            'receptor',
-            'mensajes' => fn ($q) => $q->with('emisor')->orderBy('created_at'),
-        ]);
-
-        // Marcar mensajes no leídos como leídos
-        $conversacion->mensajes()
-            ->where('emisor_id', '!=', $usuarioAutenticado)
-            ->where('leido', false)
-            ->update(['leido' => true]);
-
-        return Inertia::render('conversaciones/show', [
-            'conversacion' => $conversacion,
-        ]);
-    }
-
     public function enviados()
     {
         $usuarioAutenticado = auth()->id();

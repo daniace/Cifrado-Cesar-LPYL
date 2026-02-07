@@ -1,5 +1,5 @@
-import { User } from "./auth";
-import { MensajeModelo } from "./mensaje-modelo";
+import type { User } from "./auth";
+import type { MensajeModelo } from "./mensaje-modelo";
 
 export interface ConversacionModelo {
     id: number;
