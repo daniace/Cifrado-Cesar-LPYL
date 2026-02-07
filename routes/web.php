@@ -12,13 +12,13 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('dashboard', function () {
+//     return Inertia::render('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Nuevas rutas para conversaciones
 Route::middleware('auth')->group(function () {
-    // Esta ruta DEBE ir ANTES del resource para que no sea capturada por {conversacione}
+    
     Route::get('conversaciones/enviados', [ConversacionController::class, 'enviados'])
         ->name('conversaciones.enviados');
 
@@ -31,8 +31,8 @@ Route::middleware('auth')->group(function () {
         ->shallow()
         ->parameters(['conversaciones' => 'conversacion']);
 
-    Route::patch('/mensajes/{mensaje}', [MensajeController::class, 'update'])
-        ->name('mensajes.update');
+    Route::patch('/conversaciones/{conversacion}/leer', [ConversacionController::class, 'marcarLeida'])
+        ->name('conversaciones.leer');
 });
 
 require __DIR__.'/settings.php';

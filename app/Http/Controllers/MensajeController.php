@@ -15,6 +15,8 @@ class MensajeController extends Controller
      */
     public function store(StoreMensajeRequest $request, Conversacion $conversacion)
     {
+        // dd($conversacion);
+
         $usuarioAutenticado = auth()->id();
 
         // Verificar que el usuario puede responder (sin policy)
@@ -44,6 +46,8 @@ class MensajeController extends Controller
      */
     public function update(UpdateMensajeRequest $request, Mensaje $mensaje)
     {
+        // dd($mensaje);
+
         $mensaje->marcarLeido();
 
         return back();

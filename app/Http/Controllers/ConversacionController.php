@@ -20,18 +20,20 @@ class ConversacionController extends Controller
         $usuarioAutenticado = auth()->id();
 
         $cantidadMensajesNoLeidos = Mensaje::where('receptor_id', $usuarioAutenticado)->where('leido', false)->count();
-
+        
         $conversaciones = Conversacion::query()
-            ->where('id_emisor', $usuarioAutenticado)
-            ->orWhere('id_receptor', $usuarioAutenticado)
-            ->with(['emisor', 'receptor', 'ultimoMensaje'])
-            ->orderByDesc('fecha_ultimo_mensaje')
-            ->get();
+        ->orWhere('id_receptor', $usuarioAutenticado)
+        ->with(['emisor', 'receptor', 'ultimoMensaje', 'mensajes.emisor']) // para mandar los msjs al detalle-conversacion
+        ->orderByDesc('fecha_ultimo_mensaje')
+        ->get();
+        
+        $usuariosEmisores = User::where('id', '!=', $usuarioAutenticado)->get();
 
         return Inertia::render('conversaciones/index', [
             'conversaciones' => $conversaciones,
             'mostrar_dialog_bienvenida' => session('mostrar_dialog_bienvenida', false),
             'cantidad_mensajes_no_leidos' => $cantidadMensajesNoLeidos,
+            'usuarios_emisores' => $usuariosEmisores,
         ]);
     }
 
@@ -52,7 +54,7 @@ class ConversacionController extends Controller
      */
     public function store(StoreConversacionRequest $request)
     {
-        //dd($request->all());
+        // dd($request->all());
 
         $validated = $request->validated();
 
@@ -87,7 +89,7 @@ class ConversacionController extends Controller
      */
     public function show(Conversacion $conversacion)
     {
-        //dd($conversacion);
+        // dd($conversacion);
 
         $usuarioAutenticado = auth()->id();
 
@@ -108,17 +110,33 @@ class ConversacionController extends Controller
         ]);
     }
 
-    public function enviados() {
+    public function enviados()
+    {
         $usuarioAutenticado = auth()->id();
 
         $conversaciones = Conversacion::query()
             ->where('id_emisor', $usuarioAutenticado)
-            ->with(['emisor', 'receptor', 'ultimoMensaje'])
+            ->with(['emisor', 'receptor', 'ultimoMensaje', 'mensajes.emisor'])
             ->orderByDesc('fecha_ultimo_mensaje')
             ->get();
 
+        $usuariosReceptores = User::where('id', '!=', $usuarioAutenticado)->get();
+
         return Inertia::render('conversaciones/enviados', [
             'conversaciones' => $conversaciones,
+            'usuarios_receptores' => $usuariosReceptores,
         ]);
+    }
+
+    public function marcarLeida(Conversacion $conversacion)
+    {
+        $usuarioAutenticado = auth()->id();
+
+        $conversacion->mensajes()
+            ->where('emisor_id', '!=', $usuarioAutenticado)
+            ->where('leido', false)
+            ->update(['leido' => true]);
+
+        return back();
     }
 }
