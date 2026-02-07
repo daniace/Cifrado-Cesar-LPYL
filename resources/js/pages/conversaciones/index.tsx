@@ -69,7 +69,7 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
                     <h1 className="text-2xl font-bold">Recibidos</h1>
                 </div>
 
-                <div className="flex flex-row">
+                <div className="flex flex-row gap-2">
                     <ListaConversaciones
                         conversaciones={conversaciones}
                         onSelect={handleSelectConversacion}
