@@ -29,5 +29,5 @@ yarn-error.log
 /.gemini
 /.opencode/skills
 /.github
-agents.md
-gemini.md
+AGENTS.md
+GEMINI.md
