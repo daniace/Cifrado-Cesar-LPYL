@@ -1,5 +1,5 @@
 import { Head, usePage, usePoll } from '@inertiajs/react';
-import { useMemo, useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/conversaciones';
@@ -36,25 +36,9 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
         }
     )
 
-    // Mandar la conversacion al detalle mensaje
-    // const conversacionSeleccionada = useMemo(() => {
-    //     if (conversacionSeleccionadaId === null) return null;
-    //     return conversaciones.find(conversacion => conversacion.id === conversacionSeleccionadaId) ?? null;
-    // }, [conversaciones, conversacionSeleccionadaId]);
-
     const handleSelectConversacion = (conversacion: ConversacionModelo | null) => {
         setConversacionSeleccionada(conversacion);
     };
-
-    // Alternativa con UseEffect (No se hizo por afectar al rendimiento segun Docs)
-    // useEffect(() => {
-    //     if (conversacionSeleccionada !== null) {
-    //         const conversacion = conversaciones.find(conversacion => conversacion.id === conversacionSeleccionada.id);
-    //         if (conversacion) {
-    //             setConversacionSeleccionada(conversacion);
-    //         }
-    //     }
-    // }, [conversaciones, conversacionSeleccionada]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

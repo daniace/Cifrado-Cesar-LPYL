@@ -37,7 +37,8 @@ Una vez instaladas las herramientas, abre una terminal y ejecuta estos 6 comando
 
 ### 1. Descargar el código
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/daniace/Cifrado-Cesar-LPYL.git
+
 cd Cifrado-Cesar-LPYL
 ```
 

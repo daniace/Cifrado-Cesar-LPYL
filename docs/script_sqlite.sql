@@ -1,5 +1,5 @@
 -- Script SQL para crear la base de datos y tablas de la aplicación Cifrado Cesar
--- Compatible con SQLite (y la mayoría de SQL estándar con pequeños ajustes)
+-- Compatible con SQLite.
 
 -- Tabla de Usuarios
 CREATE TABLE "users" (

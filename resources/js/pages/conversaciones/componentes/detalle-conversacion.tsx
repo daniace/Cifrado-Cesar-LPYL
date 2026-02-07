@@ -18,7 +18,6 @@ import descifrar from "@/lib/descifrar";
 import { index } from "@/routes/conversaciones";
 import type { User } from "@/types/auth";
 import type { ConversacionModelo } from "@/types/conversacion-modelo";
-import mensajes from "@/routes/conversaciones/mensajes";
 
 export default function DetalleConversacion({ conversacion }: { conversacion: ConversacionModelo | null }) {
 
