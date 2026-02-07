@@ -28,11 +28,19 @@ class ConversacionController extends Controller
             ->count();
 
         $conversaciones = Conversacion::query()
-            ->where('id_receptor', $usuarioAutenticado)
+            ->where(function ($query) use ($usuarioAutenticado) {
+                // Conversaciones donde el usuario es participante
+                $query->where('id_emisor', $usuarioAutenticado)
+                    ->orWhere('id_receptor', $usuarioAutenticado);
+            })
+            ->whereHas('mensajes', function ($query) use ($usuarioAutenticado) {
+                // Y tiene mensajes recibidos (no enviados por el usuario)
+                $query->where('emisor_id', '!=', $usuarioAutenticado);
+            })
             ->with(['emisor', 'receptor', 'ultimoMensaje', 'mensajes.emisor'])
             ->orderByDesc('fecha_ultimo_mensaje')
             ->get();
-        
+
         $usuariosEmisores = User::where('id', '!=', $usuarioAutenticado)->get();
 
         return Inertia::render('conversaciones/index', [
@@ -121,7 +129,15 @@ class ConversacionController extends Controller
         $usuarioAutenticado = auth()->id();
 
         $conversaciones = Conversacion::query()
-            ->where('id_emisor', $usuarioAutenticado)
+            ->where(function ($query) use ($usuarioAutenticado) {
+                // Conversaciones donde el usuario es participante
+                $query->where('id_emisor', $usuarioAutenticado)
+                    ->orWhere('id_receptor', $usuarioAutenticado);
+            })
+            ->whereHas('mensajes', function ($query) use ($usuarioAutenticado) {
+                // Y tiene mensajes enviados por el usuario
+                $query->where('emisor_id', $usuarioAutenticado);
+            })
             ->with(['emisor', 'receptor', 'ultimoMensaje', 'mensajes.emisor'])
             ->orderByDesc('fecha_ultimo_mensaje')
             ->get();

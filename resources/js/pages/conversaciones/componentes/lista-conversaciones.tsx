@@ -2,7 +2,11 @@ import { ConversacionModelo } from "@/types/conversacion-modelo";
 import descifrar from "@/lib/descifrar";
 import { usePage, router } from "@inertiajs/react";
 import { User } from "@/types/auth";
-import { Circle } from "lucide-react";
+import { leer } from "@/routes/conversaciones";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function ListaConversaciones({
     conversaciones,
@@ -19,11 +23,10 @@ export default function ListaConversaciones({
     const { auth } = usePage<{ auth: { user: User } }>().props;
 
     function marcarLeido(conversacion: ConversacionModelo) {
-        // Solo marcar si hay mensajes no leídos del receptor (yo)
-        const tieneNoLeidos = conversacion.mensajes?.some(m => m.emisor_id !== auth.user.id && !m.leido);
+        const tieneNoLeidos = conversacion.mensajes?.some(mensaje => mensaje.emisor_id !== auth.user.id && !mensaje.leido);
 
         if (tieneNoLeidos) {
-            router.patch(`/conversaciones/${conversacion.id}/leer`, {}, {
+            router.patch(leer(conversacion.id).url, {}, {
                 preserveScroll: true,
                 only: ['conversaciones']
             });
@@ -31,53 +34,74 @@ export default function ListaConversaciones({
     }
 
     return (
-        <div className="border border-gray-300 rounded-lg p-4 w-1/2">
-            <div className="flex flex-col gap-2">
-                {conversaciones.map((conv) => {
-                    const tieneNoLeidos = conv.mensajes?.some(m => m.emisor_id !== auth.user.id && !m.leido);
+        <div className="flex flex-col gap-2 p-4 pt-0 w-1/2">
+            {conversaciones.map((conversacion) => {
+                const tieneNoLeidos = conversacion.mensajes?.some(mensaje => mensaje.emisor_id !== auth.user.id && !mensaje.leido);
+                const ultimoMensaje = conversacion.ultimo_mensaje || conversacion.mensajes?.[conversacion.mensajes.length - 1];
 
-                    return (
-                        <div
-                            key={conv.id}
-                            onClick={() => {
-                                marcarLeido(conv);
-                                if (seleccionada?.id === conv.id) {
-                                    onSelect(null);
-                                } else {
-                                    onSelect(conv);
-                                }
-                            }}
-                            className={`p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${seleccionada?.id === conv.id
-                                ? 'bg-gray-200 dark:bg-gray-700 border-blue-500'
-                                : 'border-gray-300'
-                                }`}
-                        >
-                            <div className="flex items-center justify-between">
-                                <div className={`font-semibold ${tieneNoLeidos ? 'text-blue-600 dark:text-blue-400 font-bold' : ''}`}>
-                                    {descifrar(String(conv.asunto), Number(conv.desplazamiento_asunto), conv.excepciones_asunto as Record<number, string>)}
+                return (
+                    <button
+                        key={conversacion.id}
+                        onClick={() => {
+                            marcarLeido(conversacion);
+                            if (seleccionada?.id === conversacion.id) {
+                                onSelect(null);
+                            } else {
+                                onSelect(conversacion);
+                            }
+                        }}
+                        className={cn(
+                            "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
+                            seleccionada?.id === conversacion.id && "bg-muted"
+                        )}
+                    >
+                        <div className="flex w-full flex-col gap-1">
+                            <div className="flex items-center">
+                                <div className="flex items-center gap-2">
+                                    <div className="font-semibold">
+                                        {conversacion.id_emisor === auth.user.id
+                                            ? (
+                                                usuarios?.find(usuario => usuario.id === conversacion.id_receptor)?.nombre + " " +
+                                                usuarios?.find(usuario => usuario.id === conversacion.id_receptor)?.apellido
+                                            )
+                                            : (
+                                                usuarios?.find(usuario => usuario.id === conversacion.id_emisor)?.nombre + " " +
+                                                usuarios?.find(usuario => usuario.id === conversacion.id_emisor)?.apellido
+                                            )
+                                        }
+                                    </div>
+                                    {tieneNoLeidos && (
+                                        <span className="flex h-2 w-2 rounded-full bg-blue-600" />
+                                    )}
                                 </div>
-                                <div className="text-sm text-gray-500">
-                                    {conv.fecha_ultimo_mensaje ? new Date(conv.fecha_ultimo_mensaje).toLocaleString() : 'N/A'}
+                                <div
+                                    className={cn(
+                                        "ml-auto text-xs",
+                                        seleccionada?.id === conversacion.id
+                                            ? "text-foreground"
+                                            : "text-muted-foreground"
+                                    )}
+                                >
+                                    {conversacion.fecha_ultimo_mensaje
+                                        ? formatDistanceToNow(new Date(conversacion.fecha_ultimo_mensaje), {
+                                            addSuffix: true,
+                                            locale: es,
+                                        })
+                                        : "N/A"}
                                 </div>
                             </div>
-                            <div className="flex items-center justify-between mt-1">
-                                <div className="text-sm">
-                                    {conv.id_emisor === auth.user.id
-                                        ? `Para: ${usuarios?.find(u => u.id === conv.id_receptor)?.nombre_usuario}`
-                                        : `De: ${usuarios?.find(u => u.id === conv.id_emisor)?.nombre_usuario}`
-                                    }
-                                </div>
-                                {tieneNoLeidos ? (
-                                    <Circle className="fill-blue-500 w-3 h-3" />
-                                ) : (
-                                    <Circle className="fill-[#8E8E93] w-3 h-3" />
-                                )}
-                                <div className="text-sm text-gray-500">{conv.mensajes?.filter(mensajes => mensajes.emisor_id !== auth.user.id && !mensajes.leido).length}</div>
+                            <div className="text-xs font-medium">
+                                {descifrar(String(conversacion.asunto), Number(conversacion.desplazamiento_asunto), conversacion.excepciones_asunto as Record<number, string>)}
                             </div>
                         </div>
-                    );
-                })}
-            </div>
+                        <div className="line-clamp-2 text-xs text-muted-foreground">
+                            {conversacion.ultimo_mensaje?.contenido
+                                ? descifrar(String(conversacion.ultimo_mensaje.contenido), Number(conversacion.ultimo_mensaje.desplazamiento_contenido), conversacion.ultimo_mensaje.excepciones_contenido as Record<number, string>)
+                                : "No hay mensajes"}
+                        </div>
+                    </button>
+                );
+            })}
         </div>
     );
 }
