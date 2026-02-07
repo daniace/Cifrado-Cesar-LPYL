@@ -8,6 +8,7 @@ import { usePage } from "@inertiajs/react";
 import { User } from "@/types/auth";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export default function DetalleConversacion({ conversacion }: { conversacion: ConversacionModelo | null }) {
 
@@ -32,9 +33,6 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
 
     return (
         <div className="border border-gray-300 rounded-lg p-4 w-full">
-            <h1>Detalle de Conversación</h1>
-            {/* <pre className="mt-4">{JSON.stringify(conversacion, null, 2)}</pre> */}
-
             {/* Header */}
             <div className="flex items-center gap-4 pb-4 border-b border-gray-300">
                 <Link href="/conversaciones">
@@ -43,9 +41,15 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
                     </Button>
                 </Link>
                 <div>
-                    <h1 className="text-xl font-bold">
-                        {descifrar(String(conversacion.asunto), Number(conversacion.desplazamiento_asunto), conversacion.excepciones_asunto as Record<number, string>)}
-                    </h1>
+                    <div className="flex items-center gap-2">
+                        <Avatar className="rounded-full bg-accent-foreground text-accent w-8 h-8 text-center">
+                            <AvatarImage src={otroUsuario?.avatar} />
+                            <AvatarFallback>{otroUsuario?.nombre.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <h1 className="text-xl font-bold">
+                            {descifrar(String(conversacion.asunto), Number(conversacion.desplazamiento_asunto), conversacion.excepciones_asunto as Record<number, string>)}
+                        </h1>
+                    </div>
                     <p className="text-sm text-gray-500">
                         Conversación con {otroUsuario?.nombre} {otroUsuario?.apellido}
                     </p>

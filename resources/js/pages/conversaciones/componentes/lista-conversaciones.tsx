@@ -31,8 +31,7 @@ export default function ListaConversaciones({
     }
 
     return (
-        <div className="border border-gray-300 rounded-lg p-4 w-full">
-            <h1 className="text-xl font-bold mb-4">Lista de Mensajes</h1>
+        <div className="border border-gray-300 rounded-lg p-4 w-1/2">
             <div className="flex flex-col gap-2">
                 {conversaciones.map((conv) => {
                     const tieneNoLeidos = conv.mensajes?.some(m => m.emisor_id !== auth.user.id && !m.leido);
@@ -69,10 +68,11 @@ export default function ListaConversaciones({
                                     }
                                 </div>
                                 {tieneNoLeidos ? (
-                                    <Circle className="fill-blue-500 text-blue-500 w-3 h-3" />
+                                    <Circle className="fill-blue-500 w-3 h-3" />
                                 ) : (
-                                    <Circle className="fill-green-500 text-green-500 w-3 h-3" />
+                                    <Circle className="fill-[#8E8E93] w-3 h-3" />
                                 )}
+                                <div className="text-sm text-gray-500">{conv.mensajes?.filter(mensajes => mensajes.emisor_id !== auth.user.id && !mensajes.leido).length}</div>
                             </div>
                         </div>
                     );

@@ -15,10 +15,11 @@ import {
 import { index, create, enviados } from '@/routes/conversaciones';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
+import BotonRedactar from '@/pages/conversaciones/componentes/boton-redactar';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Inbox',
+        title: 'Recibidos',
         href: index().url,
         icon: Inbox,
     },
@@ -53,10 +54,9 @@ export function AppSidebar() {
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
-                        <SidebarMenuButton size="lg" asChild className='bg-primary text-white hover:bg-primary/80 mt-2'>
+                        <SidebarMenuButton size="lg" asChild className='bg-primary hover:bg-primary/80 mt-1.5'>
                             <Link href={create().url} prefetch>
-                                <MailPlus className='text-black' />
-                                <span className='text-black'>Redactar</span>
+                                <BotonRedactar />
                             </Link>
                         </SidebarMenuButton>
 

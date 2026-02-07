@@ -19,13 +19,19 @@ class ConversacionController extends Controller
     {
         $usuarioAutenticado = auth()->id();
 
-        $cantidadMensajesNoLeidos = Mensaje::where('receptor_id', $usuarioAutenticado)->where('leido', false)->count();
-        
+        $cantidadMensajesNoLeidos = Mensaje::where('leido', false)
+            ->where('emisor_id', '!=', $usuarioAutenticado)
+            ->whereHas('conversacion', function ($query) use ($usuarioAutenticado) {
+                $query->where('id_emisor', $usuarioAutenticado)
+                    ->orWhere('id_receptor', $usuarioAutenticado);
+            })
+            ->count();
+
         $conversaciones = Conversacion::query()
-        ->orWhere('id_receptor', $usuarioAutenticado)
-        ->with(['emisor', 'receptor', 'ultimoMensaje', 'mensajes.emisor']) // para mandar los msjs al detalle-conversacion
-        ->orderByDesc('fecha_ultimo_mensaje')
-        ->get();
+            ->where('id_receptor', $usuarioAutenticado)
+            ->with(['emisor', 'receptor', 'ultimoMensaje', 'mensajes.emisor'])
+            ->orderByDesc('fecha_ultimo_mensaje')
+            ->get();
         
         $usuariosEmisores = User::where('id', '!=', $usuarioAutenticado)->get();
 
