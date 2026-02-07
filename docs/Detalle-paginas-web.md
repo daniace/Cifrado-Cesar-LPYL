@@ -1,48 +1,80 @@
 # Detalle de Paginas Web
 
-## Bienvenida
-### Ruta: /
-### Archivo: welcome.tsx
-#### Funcionalidad
+## 1. Bienvenida (Landing Page)
+- **Ruta:** `/`
+- **Archivo:** `resources/js/pages/welcome.tsx`
+- **Ruta directa:** `routes/web.php`.
+- **Funcionalidad:**
+  - Es la puerta de entrada a la aplicación.
+  - Muestra una animación de texto cifrado ("Cifrado César").
+  - Si el usuario está autenticado, muestra un botón "Ir a la Aplicación" que redirige a `/conversaciones`.
+  - Si no está autenticado, muestra botones para "Iniciar Sesión" y "Registrarse".
 
-Una vista de bienvenida a la aplicacion la cual te permite
-acceder al login o registro de la misma. y si estas iniciado sesion
-proporciona un boton para dirigirse al home: /conversaciones.
+## 2. Autenticación
 
-## Login
-### Ruta: /login
-### Archivo: login.tsx
-#### Funcionalidad
+### Login
+- **Ruta:** `/login`
+- **Archivo:** `resources/js/pages/auth/login.tsx`
+- **Funcionalidad:**
+  - Formulario para ingresar credenciales (nombre de usuario y contraseña).
+  - Checkbox "Recordarme" para persistencia de sesión.
+  - Enlace de recuperación de contraseña si se olvida.
 
-Permite al usuario ingresar sus credenciales para ingresar
-a la pagina y ver los mensajes recibidos.
+### Registro
+- **Ruta:** `/register`
+- **Archivo:** `resources/js/pages/auth/register.tsx`
+- **Funcionalidad:**
+  - Formulario de creación de cuenta.
+  - Campos: Nombre, Apellido, Nombre de Usuario (único), Email, Contraseña y Confirmación.
+  - Validación de campos obligatorios y formato de email.
+  - Al completar exitosamente, inicia sesión automáticamente y redirige a `/conversaciones`.
 
-## Registro
-### Ruta: /register
-### Archivo: register.tsx
-#### Funcionalidad
+## 3. Mensajería
 
-Permite al usuario poder crear una cuenta en el sistema, el mismo
-tiene que proporcionar: nombre, apellido, nombre de usuario, email y contraseña (necesita confirmarse). Una vez registrado se lo dirige a
-la pagina recibidos.
+### Bandeja de Entrada (Recibidos) - **HOME**
+- **Ruta:** `/conversaciones`
+- **Archivo Principal:** `resources/js/pages/conversaciones/index.tsx`
+- **Componentes Clave:**
+  - `ListaConversaciones` (`resources/js/pages/conversaciones/componentes/lista-conversaciones.tsx`): Panel izquierdo con el listado de las conversaciones.
+  - `DetalleConversacion` (`resources/js/pages/conversaciones/componentes/detalle-conversacion.tsx`): Panel derecho con la conversacion seleccionada.
+  - `DialogBienvenida` (`resources/js/pages/conversaciones/componentes/dialog-bienvenida.tsx`): Modal informativo al inicio.
+- **Funcionalidad:**
+  - **Bienvenida:** Muestra un modal con la cantidad de mensajes no leídos desde el último login.
+  - **Listado:** Muestra todas las conversaciones donde el usuario ha recibido mensajes.
+  - **Visualización:** Al hacer clic en una conversación, carga dinámicamente el historial de mensajes en el panel derecho sin recargar la página completa.
+  - **Respuesta:** Incluye un formulario al final del chat para responder rápidamente al remitente.
 
-## Redactar
-### Ruta: /conversaciones/create
-### Archivo: create.tsx
-#### Funcionalidad
+### Bandeja de Salida (Enviados)
+- **Ruta:** `/conversaciones/enviados`
+- **Archivo:** `resources/js/pages/conversaciones/enviados.tsx`
+- **Componentes Clave:** Reutiliza `ListaConversaciones` y `DetalleConversacion`.
+- **Funcionalidad:**
+  - Similar a la bandeja de entrada, pero filtrando las conversaciones donde el usuario autenticado es el remitente inicial.
+  - Permite revisar qué se ha enviado y continuar esas conversaciones.
 
-Permite al usuario autenticado seleccionar otro usuario registrado en el sistema para poder iniciar una conversacion con el, detallando un asunto para la conversacion, un mensaje, y un desplazamiento que se utilizara para cifrarlo con el cifrado cesar. Una vez enviado se lo dirige a la pagina recibidos.
+### Crear Nuevo Mensaje (Redactar)
+- **Ruta:** `/conversaciones/create`
+- **Archivo:** `resources/js/pages/conversaciones/create.tsx`
+- **Funcionalidad:**
+  - Formulario para iniciar un nuevo hilo de conversación.
+  - **Selector de Destinatario:** Lista desplegable con todos los usuarios del sistema.
+  - **Configuración de Cifrado:** Campo numérico para el "Desplazamiento" (Clave César).
+  - **Campos de Texto:** Asunto y Contenido del mensaje.
+  - **Vista Previa en Tiempo Real:** Muestra cómo se verá el mensaje cifrado (texto ininteligible) antes de enviarlo, basándose en el desplazamiento elegido.
 
-## Recibidos
-### Ruta: /conversaciones
-### Archivo: index.tsx
-#### Funcionalidad
+## 4. Configuración (Settings)
 
-Permite al usuario autenticado poder visualizar los mensajes entrantes o que han sido dirigidos hacia a el, en esta misma pantalla se puede seleccionar un mensaje recibido y ver mas detalladamente su contenido. Tambien permite responder el mensaje.
+### Perfil
+- **Ruta:** `/settings/profile`
+- **Archivo:** `resources/js/pages/settings/profile.tsx`
+- **Funcionalidad:** Edición de datos personales (Nombre de usuario, Email) y eliminación de cuenta.
 
-## Enviados
-### Ruta: /conversaciones/enviados
-### Archivo: enviados.tsx
-#### Funcionalidad
+### Contraseña
+- **Ruta:** `/settings/password`
+- **Archivo:** `resources/js/pages/settings/password.tsx`
+- **Funcionalidad:** Cambio de contraseña solicitando la actual y la nueva.
 
-Permite al usuario autenticado poder visualizar los mensajes que ha enviado a otros usuarios, en esta misma pantalla se puede seleccionar un mensaje enviado y ver mas detalladamente su contenido. Tambien permite seguir enviando mensajes a la conversacion.
+### Apariencia
+- **Ruta:** `/settings/appearance`
+- **Archivo:** `resources/js/pages/settings/appearance.tsx`
+- **Funcionalidad:** Selección de tema (Claro/Oscuro/Sistema).

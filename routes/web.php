@@ -12,15 +12,14 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-// Route::get('dashboard', function () {
-//     return Inertia::render('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
 // Nuevas rutas para conversaciones
 Route::middleware('auth')->group(function () {
     
     Route::get('conversaciones/enviados', [ConversacionController::class, 'enviados'])
         ->name('conversaciones.enviados');
+
+    Route::get('conversaciones/componentes/detalle-conversacion/{conversacion}', [ConversacionController::class, 'detalleConversacion'])
+        ->name('conversaciones.componentes.detalle-conversacion');
 
     Route::resource('conversaciones', ConversacionController::class)
         ->only(['index', 'create', 'store'])

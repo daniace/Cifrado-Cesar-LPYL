@@ -135,4 +135,13 @@ class ConversacionController extends Controller
 
         return back();
     }
+
+    public function detalleConversacion(Conversacion $conversacion)
+    {
+        $conversacion->load(['mensajes', 'emisor', 'receptor']);
+
+        return response()->json([
+            'conversacion' => $conversacion,
+        ]);
+    }
 }

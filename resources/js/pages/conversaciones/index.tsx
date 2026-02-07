@@ -1,5 +1,5 @@
 import { Head, usePage, usePoll } from '@inertiajs/react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/conversaciones';
@@ -25,7 +25,8 @@ interface Props {
 
 export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usuarios_emisores }: Props) {
     const { mostrar_dialog_bienvenida } = usePage<{ mostrar_dialog_bienvenida: boolean }>().props;
-    const [conversacionSeleccionadaId, setConversacionSeleccionadaId] = useState<number | null>(null);
+    // const [conversacionSeleccionadaId, setConversacionSeleccionadaId] = useState<number | null>(null);
+    const [conversacionSeleccionada, setConversacionSeleccionada] = useState<ConversacionModelo | null>(null);
 
     usePoll(5000, {
         only: ["conversaciones"]
@@ -36,24 +37,24 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
     )
 
     // Mandar la conversacion al detalle mensaje
-    const conversacionSeleccionada = useMemo(() => {
-        if (conversacionSeleccionadaId === null) return null;
-        return conversaciones.find(conversacion => conversacion.id === conversacionSeleccionadaId) ?? null;
-    }, [conversaciones, conversacionSeleccionadaId]);
+    // const conversacionSeleccionada = useMemo(() => {
+    //     if (conversacionSeleccionadaId === null) return null;
+    //     return conversaciones.find(conversacion => conversacion.id === conversacionSeleccionadaId) ?? null;
+    // }, [conversaciones, conversacionSeleccionadaId]);
 
     const handleSelectConversacion = (conversacion: ConversacionModelo | null) => {
-        setConversacionSeleccionadaId(conversacion?.id ?? null);
+        setConversacionSeleccionada(conversacion);
     };
 
     // Alternativa con UseEffect (No se hizo por afectar al rendimiento segun Docs)
     // useEffect(() => {
-    //     if (conversacionSeleccionadaId !== null) {
-    //         const conversacion = conversaciones.find(conversacion => conversacion.id === conversacionSeleccionadaId);
+    //     if (conversacionSeleccionada !== null) {
+    //         const conversacion = conversaciones.find(conversacion => conversacion.id === conversacionSeleccionada.id);
     //         if (conversacion) {
     //             setConversacionSeleccionada(conversacion);
     //         }
     //     }
-    // }, [conversaciones, conversacionSeleccionadaId]);
+    // }, [conversaciones, conversacionSeleccionada]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

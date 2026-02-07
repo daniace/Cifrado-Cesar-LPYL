@@ -3,7 +3,7 @@ import { Form, Link, usePage } from "@inertiajs/react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { ArrowLeft, Lock, Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -18,14 +18,41 @@ import descifrar from "@/lib/descifrar";
 import { index } from "@/routes/conversaciones";
 import type { User } from "@/types/auth";
 import type { ConversacionModelo } from "@/types/conversacion-modelo";
+import mensajes from "@/routes/conversaciones/mensajes";
 
 export default function DetalleConversacion({ conversacion }: { conversacion: ConversacionModelo | null }) {
 
     const { auth } = usePage<{ auth: { user: User } }>().props;
     const [contenido, setContenido] = useState('');
     const [desplazamiento, setDesplazamiento] = useState(1);
+    const [conversacionActualizada, setConversacionActualizada] = useState<ConversacionModelo | null>(conversacion);
 
-    if (!conversacion) {
+    useEffect(() => {
+        setConversacionActualizada(conversacion);
+    }, [conversacion]);
+
+    useEffect(() => {
+        if (!conversacionActualizada?.id) return;
+
+        const fetchUpdatedConversation = async () => {
+            try {
+                const response = await fetch(`/conversaciones/componentes/detalle-conversacion/${conversacionActualizada.id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(JSON.stringify(response, null, 2));
+                    setConversacionActualizada(data.conversacion);
+                }
+            } catch (error) {
+                console.error('Error fetching updated conversation:', error);
+            }
+        };
+
+        const intervaloId = setInterval(fetchUpdatedConversation, 5000);
+
+        return () => clearInterval(intervaloId);
+    }, [conversacionActualizada?.id]);
+
+    if (!conversacionActualizada) {
         return (
             <div className="border border-secondary rounded-lg p-8 w-full flex flex-col items-center justify-center text-gray-500 italic h-[80vh]">
                 <p className="text-xl">Hola, <span className="font-semibold">{auth.user.nombre_usuario}</span>!</p>
@@ -33,14 +60,12 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
         );
     }
 
-    // Distinguir a los usuarios uno del otro
-    const otroUsuario = conversacion.id_emisor === auth.user.id
-        ? conversacion.receptor
-        : conversacion.emisor;
+    const otroUsuario = conversacionActualizada.id_emisor === auth.user.id
+        ? conversacionActualizada.receptor
+        : conversacionActualizada.emisor;
 
     return (
         <div className="border border-gray-300 rounded-lg p-4 w-full">
-            {/* Header */}
             <div className="flex items-start gap-4 border-b p-4">
                 <Link href={index().url}>
                     <Button variant="ghost" size="icon">
@@ -58,8 +83,8 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
                                 {otroUsuario?.nombre} {otroUsuario?.apellido} - ({otroUsuario?.nombre_usuario})
                             </div>
                             <div className="text-xs text-muted-foreground">
-                                {conversacion.created_at
-                                    ? new Date(conversacion.created_at).toLocaleString('en-US', {
+                                {conversacionActualizada.created_at
+                                    ? new Date(conversacionActualizada.created_at).toLocaleString('en-US', {
                                         month: 'short',
                                         day: 'numeric',
                                         year: 'numeric',
@@ -72,7 +97,7 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
                             </div>
                         </div>
                         <div className="text-xs font-medium">
-                            {descifrar(String(conversacion.asunto), Number(conversacion.desplazamiento_asunto), conversacion.excepciones_asunto as Record<number, string>)}
+                            {descifrar(String(conversacionActualizada.asunto), Number(conversacionActualizada.desplazamiento_asunto), conversacionActualizada.excepciones_asunto as Record<number, string>)}
                         </div>
                         <div className="line-clamp-1 text-xs">
                             {otroUsuario?.email}
@@ -84,8 +109,8 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
             {/* Mensajes */}
             <ScrollArea className="h-[500px]">
                 <div className="flex-1 overflow-y-auto py-4 space-y-4">
-                    {conversacion.mensajes && conversacion.mensajes.length > 0 ? (
-                        conversacion.mensajes.map((mensaje) => {
+                    {conversacionActualizada.mensajes && conversacionActualizada.mensajes.length > 0 ? (
+                        conversacionActualizada.mensajes.map((mensaje) => {
                             const usuarioActual = mensaje.emisor_id === auth.user.id;
                             return (
                                 <div
@@ -121,7 +146,7 @@ export default function DetalleConversacion({ conversacion }: { conversacion: Co
             <Separator />
             <Form
                 method="post"
-                action={`/conversaciones/${conversacion.id}/mensajes`}
+                action={`/conversaciones/${conversacionActualizada.id}/mensajes`}
                 disableWhileProcessing
                 onSubmit={(e) => {
                     e.preventDefault();
