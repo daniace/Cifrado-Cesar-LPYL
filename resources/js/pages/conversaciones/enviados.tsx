@@ -1,8 +1,5 @@
 import { Head, usePoll } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
-import { PenSquare } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, User } from '@/types';
 import type { ConversacionModelo } from '@/types/conversacion-modelo';
