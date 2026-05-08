@@ -5,18 +5,20 @@ if [ "$SUPERVISOR_PHP_USER" != "root" ] && [ "$SUPERVISOR_PHP_USER" != "sail" ];
     exit 1
 fi
 
-if [ ! -z "$WWWUSER" ]; then
+if [ "$(id -u)" -eq 0 ] && [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail
 fi
 
 if [ ! -d /.composer ]; then
-    mkdir /.composer
+    mkdir -p /.composer || true
 fi
 
-chmod -R ugo+rw /.composer
+if [ "$(id -u)" -eq 0 ] || [ -O /.composer ]; then
+    chmod -R ugo+rw /.composer || true
+fi
 
 if [ $# -gt 0 ]; then
-    if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
+    if [ "$SUPERVISOR_PHP_USER" = "root" ] || [ "$(id -u)" -ne 0 ]; then
         exec "$@"
     else
         exec gosu $WWWUSER "$@"
@@ -24,3 +26,4 @@ if [ $# -gt 0 ]; then
 else
     exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 fi
+
