@@ -1,4 +1,4 @@
-import { MailPlus } from "lucide-react";
+import { MailPlus } from 'lucide-react';
 
 export default function BotonRedactar() {
     return (

@@ -23,20 +23,31 @@ interface Props {
     usuarios_emisores: User[];
 }
 
-export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usuarios_emisores }: Props) {
-    const { mostrar_dialog_bienvenida } = usePage<{ mostrar_dialog_bienvenida: boolean }>().props;
+export default function Index({
+    conversaciones,
+    cantidad_mensajes_no_leidos,
+    usuarios_emisores,
+}: Props) {
+    const { mostrar_dialog_bienvenida } = usePage<{
+        mostrar_dialog_bienvenida: boolean;
+    }>().props;
     // const [conversacionSeleccionadaId, setConversacionSeleccionadaId] = useState<number | null>(null);
-    const [conversacionSeleccionada, setConversacionSeleccionada] = useState<ConversacionModelo | null>(null);
+    const [conversacionSeleccionada, setConversacionSeleccionada] =
+        useState<ConversacionModelo | null>(null);
 
-    usePoll(5000, {
-        only: ["conversaciones"]
-    },
+    usePoll(
+        5000,
         {
-            keepAlive: true
-        }
-    )
+            only: ['conversaciones'],
+        },
+        {
+            keepAlive: true,
+        },
+    );
 
-    const handleSelectConversacion = (conversacion: ConversacionModelo | null) => {
+    const handleSelectConversacion = (
+        conversacion: ConversacionModelo | null,
+    ) => {
         setConversacionSeleccionada(conversacion);
     };
 
@@ -45,7 +56,9 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
             <Head title="Recibidos" />
 
             {mostrar_dialog_bienvenida && (
-                <DialogBienvenida cantidad_mensajes_no_leidos={cantidad_mensajes_no_leidos} />
+                <DialogBienvenida
+                    cantidad_mensajes_no_leidos={cantidad_mensajes_no_leidos}
+                />
             )}
 
             <div className="flex flex-col gap-4 p-4">
@@ -60,12 +73,11 @@ export default function Index({ conversaciones, cantidad_mensajes_no_leidos, usu
                         seleccionada={conversacionSeleccionada}
                         usuarios={usuarios_emisores}
                     />
-                    <DetalleConversacion conversacion={conversacionSeleccionada || null} />
+                    <DetalleConversacion
+                        conversacion={conversacionSeleccionada || null}
+                    />
                 </div>
-
             </div>
-
-
         </AppLayout>
     );
 }

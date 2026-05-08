@@ -48,7 +48,11 @@ export default function DeleteUser() {
                             ¿Estás seguro de que quieres eliminar tu cuenta?
                         </DialogTitle>
                         <DialogDescription>
-                            Una vez que tu cuenta sea eliminada, todos sus recursos y datos también serán eliminados permanentemente. Por favor, introduce tu contraseña para confirmar que deseas eliminar permanentemente tu cuenta.
+                            Una vez que tu cuenta sea eliminada, todos sus
+                            recursos y datos también serán eliminados
+                            permanentemente. Por favor, introduce tu contraseña
+                            para confirmar que deseas eliminar permanentemente
+                            tu cuenta.
                         </DialogDescription>
 
                         <Form

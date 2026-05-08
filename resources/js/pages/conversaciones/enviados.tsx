@@ -18,16 +18,22 @@ interface Props {
     usuarios_receptores: User[];
 }
 
-export default function Enviados({ conversaciones, usuarios_receptores }: Props) {
-    const [conversacionSeleccionada, setConversacionSeleccionada] = useState<ConversacionModelo | null>(null);
+export default function Enviados({
+    conversaciones,
+    usuarios_receptores,
+}: Props) {
+    const [conversacionSeleccionada, setConversacionSeleccionada] =
+        useState<ConversacionModelo | null>(null);
 
-    usePoll(5000, {
-        only: ["conversaciones"]
-    },
+    usePoll(
+        5000,
         {
-            keepAlive: true
-        }
-    )
+            only: ['conversaciones'],
+        },
+        {
+            keepAlive: true,
+        },
+    );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -45,12 +51,11 @@ export default function Enviados({ conversaciones, usuarios_receptores }: Props)
                         seleccionada={conversacionSeleccionada}
                         usuarios={usuarios_receptores}
                     />
-                    <DetalleConversacion conversacion={conversacionSeleccionada || null} />
+                    <DetalleConversacion
+                        conversacion={conversacionSeleccionada || null}
+                    />
                 </div>
-
             </div>
-
-
         </AppLayout>
     );
 }

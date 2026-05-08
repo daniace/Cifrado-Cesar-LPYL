@@ -27,7 +27,7 @@ const mainNavItems: NavItem[] = [
         title: 'Enviados',
         href: enviados().url,
         icon: Send,
-    }
+    },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -54,12 +54,15 @@ export function AppSidebar() {
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
-                        <SidebarMenuButton size="lg" asChild className='bg-primary hover:bg-primary/80 mt-1.5'>
+                        <SidebarMenuButton
+                            size="lg"
+                            asChild
+                            className="mt-1.5 bg-primary hover:bg-primary/80"
+                        >
                             <Link href={create().url} prefetch>
                                 <BotonRedactar />
                             </Link>
                         </SidebarMenuButton>
-
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>

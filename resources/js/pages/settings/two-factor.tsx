@@ -57,7 +57,11 @@ export default function TwoFactor({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <Badge variant="default">Activada</Badge>
                             <p className="text-muted-foreground">
-                                Con la autenticación de dos factores activada, se te solicitará un pin seguro y aleatorio durante el inicio de sesión, el cual puedes obtener de la aplicación compatible con TOTP en tu teléfono.
+                                Con la autenticación de dos factores activada,
+                                se te solicitará un pin seguro y aleatorio
+                                durante el inicio de sesión, el cual puedes
+                                obtener de la aplicación compatible con TOTP en
+                                tu teléfono.
                             </p>
 
                             <TwoFactorRecoveryCodes
@@ -84,7 +88,11 @@ export default function TwoFactor({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <Badge variant="destructive">Desactivada</Badge>
                             <p className="text-muted-foreground">
-                                Cuando activas la autenticación de dos factores, se te solicitará un pin seguro y aleatorio durante el inicio de sesión, el cual puedes obtener de la aplicación compatible con TOTP en tu teléfono.
+                                Cuando activas la autenticación de dos factores,
+                                se te solicitará un pin seguro y aleatorio
+                                durante el inicio de sesión, el cual puedes
+                                obtener de la aplicación compatible con TOTP en
+                                tu teléfono.
                             </p>
 
                             <div>

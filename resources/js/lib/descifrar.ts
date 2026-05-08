@@ -2,7 +2,11 @@
 // ademas toma como parametro un objeto con las excepciones que se hicieron en la encriptacion
 // y retorna el texto desencriptado.
 
-export default function descifrar(texto: string, desplazamiento: number, excepciones: Record<number, string> = {}): string {
+export default function descifrar(
+    texto: string,
+    desplazamiento: number,
+    excepciones: Record<number, string> = {},
+): string {
     const normalizado = texto.normalize('NFD').replace(/[̀-ͯ]/g, '');
     let descifrado = '';
 
@@ -10,11 +14,17 @@ export default function descifrar(texto: string, desplazamiento: number, excepci
         const codigo = normalizado.charCodeAt(i);
 
         if (codigo >= 65 && codigo <= 90) {
-            descifrado += String.fromCharCode(((codigo - 65 - desplazamiento + 26) % 26 + 26) % 26 + 65);
+            descifrado += String.fromCharCode(
+                ((((codigo - 65 - desplazamiento + 26) % 26) + 26) % 26) + 65,
+            );
         } else if (codigo >= 97 && codigo <= 122) {
-            descifrado += String.fromCharCode(((codigo - 97 - desplazamiento + 26) % 26 + 26) % 26 + 97);
+            descifrado += String.fromCharCode(
+                ((((codigo - 97 - desplazamiento + 26) % 26) + 26) % 26) + 97,
+            );
         } else if (codigo >= 48 && codigo <= 57) {
-            descifrado += String.fromCharCode(((codigo - 48 - desplazamiento + 10) % 10 + 10) % 10 + 48);
+            descifrado += String.fromCharCode(
+                ((((codigo - 48 - desplazamiento + 10) % 10) + 10) % 10) + 48,
+            );
         } else {
             descifrado += normalizado[i];
         }

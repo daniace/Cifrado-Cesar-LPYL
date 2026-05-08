@@ -29,7 +29,9 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Correo electrónico</Label>
+                                <Label htmlFor="email">
+                                    Correo electrónico
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -51,7 +53,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     {processing && (
                                         <LoaderCircle className="h-4 w-4 animate-spin" />
                                     )}
-                                    Enviar enlace de restablecimiento de contraseña
+                                    Enviar enlace de restablecimiento de
+                                    contraseña
                                 </Button>
                             </div>
                         </>

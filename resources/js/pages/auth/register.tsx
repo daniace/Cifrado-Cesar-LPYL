@@ -26,9 +26,7 @@ export default function Register() {
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-6">
-
                             <div className="grid grid-cols-2 gap-4">
-
                                 <div className="grid gap-2">
                                     <Label htmlFor="nombre">Nombre</Label>
                                     <Input
@@ -63,7 +61,6 @@ export default function Register() {
                                         className="mt-2"
                                     />
                                 </div>
-
                             </div>
 
                             <div className="grid gap-2">
@@ -87,7 +84,9 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Correo electrónico</Label>
+                                <Label htmlFor="email">
+                                    Correo electrónico
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
